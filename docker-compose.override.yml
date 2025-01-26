@@ -1,0 +1,13 @@
+version: '3.9'
+
+services:
+  scheduler:
+    user: root
+    volumes:
+        - /var/run/docker.sock:/var/run/docker.sock:rw
+  latex_compiler:
+    build:
+      dockerfile: Dockerfile.latex
+      context: .
+    container_name: latex_compiler
+    image: latex_compiler

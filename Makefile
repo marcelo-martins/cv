@@ -1,7 +1,10 @@
-.PHONY: build generate_pdf
+.PHONY: stop_conteiners remove_conteiners remove_images
 
-build:
-	docker build -t latex_compiler .
+stop_conteiners:
+	docker ps -q | xargs -r docker stop
 
-generate_pdf:
-	docker run --rm -v $(pwd)/output:/output latex_compiler
+remove_conteiners:
+	docker ps -a -q | xargs -r docker rm
+
+remove_images:
+	docker images -q | xargs docker rmi

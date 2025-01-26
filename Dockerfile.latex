@@ -1,0 +1,5 @@
+FROM texlive/texlive
+
+WORKDIR /tex
+
+COPY /latex/input/CV_Marcelo_Martins.tex /tex/

@@ -1,5 +1,1 @@
-FROM texlive/texlive
-
-WORKDIR /tex
-
-COPY /tex/CV_Marcelo_Martins.tex /tex/
+FROM quay.io/astronomer/astro-runtime:12.6.0
