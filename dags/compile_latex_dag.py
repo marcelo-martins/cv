@@ -3,6 +3,7 @@ from airflow.providers.docker.operators.docker import DockerOperator
 from datetime import datetime
 from docker.types import Mount
 import os
+from sensors.file_change_sensor import FileChangeSensor
 
 input_path = os.path.join(os.getenv('ABSOLUTE_PATH'), 'latex/input')
 output_path = os.path.join(os.getenv('ABSOLUTE_PATH'), 'latex/output')
@@ -20,6 +21,15 @@ with DAG(
     catchup=False,
 ) as dag:
     
+    changed_file = FileChangeSensor(
+        task_id='check_changed_file',
+        filepath=os.path.join('latex/input/', 'CV_Marcelo_Martins.tex'),
+        poke_interval=10,
+        timeout=600,
+        mode='poke',
+
+    )
+    
     compile_latex = DockerOperator(
         task_id='compile_latex',
         image='latex_compiler',
@@ -34,3 +44,5 @@ with DAG(
         ],
         mount_tmp_dir=False,
     )
+
+    changed_file >> compile_latex

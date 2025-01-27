@@ -5,6 +5,7 @@ services:
     user: root
     volumes:
         - /var/run/docker.sock:/var/run/docker.sock:rw
+        - /home/marc/Documents/coding/cv/latex/input:/usr/local/airflow/latex/input
   latex_compiler:
     build:
       dockerfile: Dockerfile.latex
