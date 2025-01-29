@@ -1,4 +1,3 @@
-from airflow.sensors.filesystem import FileSensor
 from airflow.sensors.base import BaseSensorOperator
 import os
 import hashlib

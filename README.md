@@ -51,3 +51,5 @@ The Astronomer CLI is maintained with love by the Astronomer team. To report a b
 ##Useful commands
 git show dev:tex/CV_Marcelo_Martins.tex > latex/input/CV_Marcelo_Martins.tex 
 /usr/local/airflow to access files inside airflow conteiner created with the astro cli
+git commit --amend -m message to rewrite message before pushing
+docker build -t my-custom-image -f CustomDockerfile . to start a conteiner from a Dockerfile that has another name

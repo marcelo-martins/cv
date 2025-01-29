@@ -1,5 +1,6 @@
 from airflow import DAG
 from airflow.providers.docker.operators.docker import DockerOperator
+from airflow.operators.dagrun_operator import TriggerDagRunOperator
 from datetime import datetime
 from docker.types import Mount
 import os
@@ -7,6 +8,7 @@ from sensors.file_change_sensor import FileChangeSensor
 
 input_path = os.path.join(os.getenv('ABSOLUTE_PATH'), 'latex/input')
 output_path = os.path.join(os.getenv('ABSOLUTE_PATH'), 'latex/output')
+include_path = os.path.join(os.getenv('ABSOLUTE_PATH'), 'include')
 
 default_args = {
     'owner': 'airflow',
@@ -27,7 +29,6 @@ with DAG(
         poke_interval=10,
         timeout=600,
         mode='poke',
-
     )
     
     compile_latex = DockerOperator(
@@ -35,14 +36,21 @@ with DAG(
         image='latex_compiler',
         api_version='auto',
         auto_remove='success',
-        command="sh -c 'pdflatex -output-directory=/latex/output /latex/input/CV_Marcelo_Martins.tex && rm -f /latex/output/*.aux /latex/output/*.log /latex/output/*.out'",
+        command="sh -c 'sh /latex/include/validate_tex.sh && rm -f /latex/output/*.aux /latex/output/*.log /latex/output/*.out'",
         docker_url="unix://var/run/docker.sock",
         network_mode="bridge",
         mounts=[
             Mount(source=input_path, target="/latex/input", type="bind"),
             Mount(source=output_path, target="/latex/output", type="bind"),
+            Mount(source=include_path, target="/latex/include", type="bind"),
         ],
         mount_tmp_dir=False,
     )
 
-    changed_file >> compile_latex
+    trigger = TriggerDagRunOperator(
+        task_id='trigger_next_run',
+        trigger_dag_id='latex_compilation',
+        reset_dag_run=True
+    )
+
+    changed_file >> compile_latex >> trigger
