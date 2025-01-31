@@ -1,0 +1,21 @@
+# ===============================
+# Docker Compose Override for Astro CLI
+# Author: Marcelo Martins
+# Usage: This script complements the default docker-compose file created by Astro CLI (Hidden, by default)
+# ===============================
+
+version: '3.9'
+
+services:
+  scheduler:
+    user: root
+    volumes:
+        - /var/run/docker.sock:/var/run/docker.sock:rw # Docker sock mapped to the be used in the DockerOperator
+        - ./latex:/usr/local/airflow/latex # Folder that stores the .tex file and the temporary .pdf
+        - ./include:/usr/local/airflow/include # Folder that includes the auxiliary bash scripts
+  latex_compiler:
+    build:
+      dockerfile: Dockerfile.latex # Custom image for the texlive conteiner
+      context: .
+    container_name: latex_compiler
+    image: latex_compiler # Necessary parameter to be called by DockerOperator and to avoid the random names that Docker generates by default

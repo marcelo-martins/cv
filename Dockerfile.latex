@@ -1,0 +1,16 @@
+# ===========================
+# Dockerfile for LaTeX Compiler
+# Author: Marcelo Martins
+# Purpose: This image installs the texlive library, a specialized set of tools design to manage .tex files
+# Base Image: texlive/texlive
+# ===========================
+
+FROM texlive/texlive:latest
+
+WORKDIR /tex
+
+# Copying the .tex file to the conteiner
+COPY /latex/input /tex/
+
+# Copying the auxiliary bash script that validates the .tex file to the conteiner
+COPY /include/validate_tex.sh /tex/
