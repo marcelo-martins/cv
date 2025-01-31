@@ -1,4 +1,4 @@
-# ===========================
+# ======================================================================================================
 # Airflow DAG for LaTeX Compilation and GitHub Upload
 # Author: Marcelo Martins
 # Description:
@@ -8,7 +8,7 @@
 # - If the PDF is not generated, the upload to GitHub is skipped.
 # - The DAG then restarts itself to listen for further modifications.
 # - After 10 minutes without modifications in the .tex file, the DAG finishes.
-# ===========================
+# ======================================================================================================
 
 from airflow import DAG
 

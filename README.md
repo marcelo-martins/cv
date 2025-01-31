@@ -1,55 +1,113 @@
-Overview
-========
+# 🚀 CV Automation with Airflow (Astro) & Docker
 
-Welcome to Astronomer! This project was generated after you ran 'astro dev init' using the Astronomer CLI. This readme describes the contents of the project, as well as how to run Apache Airflow on your local machine.
+## 📌 Project Overview
+This project was created as a personal challenge. My CV was written in .docx but I recently decided to migrate to .tex to make it more customizable.
+LaTeX files can be easily manipulated with online platforms such as Overleaf, but I decided to develop everything locally and to make a ETL that updates everything.
+The project automates the process of **compiling a LaTeX (`.tex`) file into a PDF** using **Apache Airflow** and **Docker**.
+It continuously monitors changes in a `.tex` file (My CV) and, when detected:
+1. **Compiles it into a PDF** using a Docker container.
+2. **Uploads the generated PDF** to a GitHub repository.
+3. **Resets the workflow** to monitor future updates.
+By doing this, with a simple command (astro dev start) the workflow monitors any changes to the .tex file and updates a dedicated github repository with the last version of my CV.
 
-Project Contents
-================
+## 🎯 Goal of This Project
+- **Automate LaTeX compilation** without manual intervention.
+- **Make the process reproducible** using Docker & Airflow.
+- **Easily access to the last version of my CV** by uploading them to GitHub.
+---
 
-Your Astro project contains the following files and folders:
+## 🛠️ Installation & Setup
 
-- dags: This folder contains the Python files for your Airflow DAGs. By default, this directory includes one example DAG:
-    - `example_astronauts`: This DAG shows a simple ETL pipeline example that queries the list of astronauts currently in space from the Open Notify API and prints a statement for each astronaut. The DAG uses the TaskFlow API to define tasks in Python, and dynamic task mapping to dynamically print a statement for each astronaut. For more on how this DAG works, see our [Getting started tutorial](https://www.astronomer.io/docs/learn/get-started-with-airflow).
-- Dockerfile: This file contains a versioned Astro Runtime Docker image that provides a differentiated Airflow experience. If you want to execute other commands or overrides at runtime, specify them here.
-- include: This folder contains any additional files that you want to include as part of your project. It is empty by default.
-- packages.txt: Install OS-level packages needed for your project by adding them to this file. It is empty by default.
-- requirements.txt: Install Python packages needed for your project by adding them to this file. It is empty by default.
-- plugins: Add custom or community plugins for your project to this file. It is empty by default.
-- airflow_settings.yaml: Use this local-only file to specify Airflow Connections, Variables, and Pools instead of entering them in the Airflow UI as you develop DAGs in this project.
+### **🔹 Prerequisites**
+You can try for yourself, if you already have a .tex CV (if you don't, python libraries like pandoc can convert from almost every file format to .tex), make sure you have installed:
+- **Docker**: [Install Docker](https://docs.docker.com/get-docker/)
+- **Docker Compose**: [Install Docker Compose](https://docs.docker.com/compose/install/)
+- **GitHub Personal Access Token** [https://www.geeksforgeeks.org/how-to-generate-personal-access-token-in-github/] with "Contents" permission
+- **Basic LaTeX knowledge** (if you plan to modify the `.tex` file)
+- **Astro CLI** [https://www.astronomer.io/docs/astro/cli/install-cli/] to start the project
 
-Deploy Your Project Locally
-===========================
+### **🔹 1️⃣ Clone This Repository**
+```bash
+git clone https://github.com/marcelo-martins/cv.git
+cd cv/
+```
 
-1. Start Airflow on your local machine by running 'astro dev start'.
+### **🔹 2️⃣ Set Up Environment Variables**
+Rename the .envexample file in the project root to `.env` and adapt the variables
 
-This command will spin up 4 Docker containers on your machine, each for a different Airflow component:
+### **🔹 3️⃣ Build and Start the Project**
+```bash
+astro dev start
+```
 
-- Postgres: Airflow's Metadata Database
-- Webserver: The Airflow component responsible for rendering the Airflow UI
-- Scheduler: The Airflow component responsible for monitoring and triggering tasks
-- Triggerer: The Airflow component responsible for triggering deferred tasks
+### **🔹 4️⃣ Access Airflow Web UI**
+After starting the project, access the **Airflow UI**:
+```bash
+http://localhost:8080
+```
+- Username: **admin**
+- Password: **admin**
 
-2. Verify that all 4 Docker containers were created by running 'docker ps'.
+---
 
-Note: Running 'astro dev start' will start your project with the Airflow Webserver exposed at port 8080 and Postgres exposed at port 5432. If you already have either of those ports allocated, you can either [stop your existing Docker containers or change the port](https://www.astronomer.io/docs/astro/cli/troubleshoot-locally#ports-are-not-available-for-my-local-airflow-webserver).
+## 🚀 Usage Guide
 
-3. Access the Airflow UI for your local Airflow project. To do so, go to http://localhost:8080/ and log in with 'admin' for both your Username and Password.
+### **🔹 Start the latex_compiler DAG manually to keep it running**
 
-You should also be able to access your Postgres Database at 'localhost:5432/postgres'.
+### **🔹 Modifying the LaTeX File**
+- Edit the `.tex` file inside `latex/input/`.
+- The **Airflow DAG automatically detects the change** and triggers the compilation.
 
-Deploy Your Project to Astronomer
-=================================
+### **🔹 Checking DAG Status**
+- Open **Airflow Web UI (`http://localhost:8080`)**.
+- Navigate to the **"latex_compilation" DAG**.
+- Click on "Graph View" to monitor tasks.
 
-If you have an Astronomer account, pushing code to a Deployment on Astronomer is simple. For deploying instructions, refer to Astronomer documentation: https://www.astronomer.io/docs/astro/deploy-code/
+### **🔹 Accessing the Generated PDF**
+- If configured, it will also be pushed to your GitHub repository.
 
-Contact
-=======
+### **🔹 Stopping the Project**
+After 10 minutes without modifications, the DAG stops
+You can also run
+```bash 
+astro dev stop
+```
 
-The Astronomer CLI is maintained with love by the Astronomer team. To report a bug or suggest a change, reach out to our support.
+---
 
+## 🔧 Troubleshooting
 
-##Useful commands
-git show dev:tex/CV_Marcelo_Martins.tex > latex/input/CV_Marcelo_Martins.tex 
-/usr/local/airflow to access files inside airflow conteiner created with the astro cli
-git commit --amend -m message to rewrite message before pushing
-docker build -t my-custom-image -f CustomDockerfile . to start a conteiner from a Dockerfile that has another name
+### **1️⃣ Airflow Not Detecting Changes**
+- Ensure volume mounts are correctly configured:
+  ```yaml
+  volumes:
+    - ./latex/input:/usr/local/airflow/latex/input
+  ```
+- Restart Airflow:
+  ```bash
+  docker-compose restart airflow
+  ```
+
+### **2️⃣ GitHub Upload Failing**
+- Check if your **Personal Access Token (PAT)** has the correct permissions (`repo` scope).
+- Verify the **GitHub repository URL** in `.env`.
+
+### **3️⃣ Docker Inside the Container Not Working**
+- Make sure you're running with `privileged: true` in `docker-compose.yml`:
+  ```yaml
+  privileged: true
+  ```
+
+---
+
+## 📜 License
+This project is licensed under the **MIT License**.
+
+## 🤝 Contributing
+Feel free to submit **pull requests** or **open issues** if you have improvements or feature requests!
+
+## 📩 Contact
+For questions or collaborations, reach out via:
+📧 Email: [marcelobmartins219@hotmail.com](mailto:marcelobmartins219@hotmail.com)  
+🔗 LinkedIn: [Your LinkedIn Profile](https://www.linkedin.com/in/your-profile)  
+

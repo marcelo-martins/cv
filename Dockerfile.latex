@@ -1,9 +1,9 @@
-# ===========================
+# =========================================================================================================
 # Dockerfile for LaTeX Compiler
 # Author: Marcelo Martins
 # Purpose: This image installs the texlive library, a specialized set of tools design to manage .tex files
 # Base Image: texlive/texlive
-# ===========================
+# =========================================================================================================
 
 FROM texlive/texlive:latest
 
