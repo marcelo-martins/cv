@@ -1,8 +1,6 @@
 #!/bin/sh
 
-set - e # Exit on first error
-
-# ===============================
+# =========================================================================================
 # Upload file to GitHub
 # Author: Marcelo Martins
 # Usage: This script automates pushing a file (in this case, a PDF) to a GitHub repository.
@@ -11,7 +9,9 @@ set - e # Exit on first error
 #   - TIMEZONE: The timezone for timestamps
 #   - GIT_REPO: The GitHub repository URL
 #   - GIT_EMAIL: GitHub email for commits
-# ===============================
+# =========================================================================================
+
+set - e # Exit on first error
 
 PDF_PATH=latex/output/$FILE_NAME.pdf
 TIMESTAMP=$(TZ="$TIMEZONE" date +"%Y-%m-%d %H:%M:%S")

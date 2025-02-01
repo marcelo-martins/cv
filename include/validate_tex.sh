@@ -1,8 +1,6 @@
 #!/bin/sh
 
-set - e # Exists on the first error
-
-# ===============================
+# ========================================================================================
 # Validates the .tex file
 # Author: Marcelo Martins
 # Usage: This script uses pdflatex library to validate the .tex file and convert it to pdf
@@ -10,7 +8,9 @@ set - e # Exists on the first error
 #   - FILE_NAME: The LaTeX file name (without extension)
 #   - INPUT_FILE: The LaTeX file relative path
 #   - OUTPUT_DIR: The latex/output path in which the .pdf will be generated
-# ===============================
+# ========================================================================================
+
+set - e # Exists on the first error
 
 INPUT_FILE=/latex/input/$FILE_NAME.tex
 OUTPUT_DIR=/latex/output
