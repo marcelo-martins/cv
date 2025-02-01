@@ -17,6 +17,8 @@ It continuously monitors changes in a `.tex` file (My CV at the latex/input fold
 3. **Resets the workflow** to monitor future updates.
 By doing this, with a simple command (astro dev start) the workflow monitors any changes to the .tex file and updates a dedicated GitHub repository with the last version of my CV.
 
+![Project Workflow](img/final_dag.png)
+
 ## 🎯 Motivation
 My CV was originally written in .docx, but I decided to migrate it to LaTeX for greater customization and flexibility. While platforms like Overleaf allow easy LaTeX editing, I wanted to build a fully automated, local solution using Airflow and Docker. This project creates a near real-time ETL pipeline that monitors changes to my .tex file, compiles it into a .pdf, and uploads the latest version to GitHub, ensuring I always have an up-to-date CV in a user-friendly format.
 
