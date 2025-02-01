@@ -66,7 +66,7 @@ with DAG(
         task_id='check_changed_file',
         filepath=os.path.join('latex/input/', cv_file_name_tex),
         poke_interval=10,
-        timeout=600,
+        timeout=int(os.getenv('MAX_WAIT_FOR_CHANGES_DAG')),
         mode='poke',
     )
     
