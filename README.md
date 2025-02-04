@@ -15,12 +15,12 @@ It continuously monitors changes in a `.tex` file (My CV at the latex/input fold
 1. **Compiles it into a PDF** using a Docker container.
 2. **Uploads the generated PDF** to a GitHub repository.
 3. **Resets the workflow** to monitor future updates.
-By doing this, with a simple command (astro dev start) the workflow monitors any changes to the .tex file and updates a dedicated GitHub repository with the last version of my CV.
+By doing this, with a simple command (astro dev start) the workflow monitors any changes to the .tex file and updates a [dedicated GitHub repository](https://github.com/marcelo-martins/marcelomartinsresume) with the last version of my CV.
 
 ![Project Workflow](img/final_dag.png)
 
 ## 🎯 Motivation
-My CV was originally written in .docx, but I decided to migrate it to LaTeX for greater customization and flexibility. While platforms like Overleaf allow easy LaTeX editing, I wanted to build a fully automated, local solution using Airflow and Docker. This project creates a near real-time ETL pipeline that monitors changes to my .tex file, compiles it into a .pdf, and uploads the latest version to GitHub, ensuring I always have an up-to-date CV in a user-friendly format.
+My CV was originally written in .docx, but I decided to migrate it to LaTeX for greater customization and flexibility. While platforms like Overleaf allow easy online LaTeX editing, I wanted to build a fully automated, local solution using Airflow and Docker. Previously, everytime I changed anything in my CV, I had to manually convert it to a PDF file and store it elsewhere. This project automates this process by monitoring changes and uploading the latest version to GitHub, ensuring I always have the latest version of my CV in a user-friendly format.
 
 ## 🛠️ Installation & Setup
 
