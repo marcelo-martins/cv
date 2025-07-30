@@ -19,3 +19,6 @@ restart:
 
 stop:
 	astro dev stop
+
+build_latex_image:
+	docker build -t latex_compiler -f Dockerfile.latex .

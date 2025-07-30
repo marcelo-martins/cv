@@ -42,7 +42,14 @@ cd cv/
 Rename the .envexample file in the project root to `.env` and adapt the variables
 
 ### **🔹 3️⃣ Build and Start the Project**
+If running on windows, install makefile support or simply run:
 ```bash
+docker build -t latex_compiler -f Dockerfile.latex .
+astro dev start
+```
+For Linux, MacOS:
+```bash
+make build_latex_image
 astro dev start
 ```
 
