@@ -28,11 +28,20 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-git config --global user.email "$GIT_EMAIL"
-git config --global user.name 'Airflow Bot'
+echo "Cloned"
+
+git config user.email "$GIT_EMAIL"
+git config user.name 'Airflow Bot'
+
+echo "Git configured"
+
 cp /usr/local/airflow/$PDF_PATH /tmp/repocv
 git add $FILE_NAME.pdf
 git commit -m "Updated CV from Airflow on $TIMESTAMP"
+echo "Commited"
+
 git push origin main
+echo "Pushed"
+
 rm /usr/local/airflow/$PDF_PATH
 rm -rf /tmp/repocv
